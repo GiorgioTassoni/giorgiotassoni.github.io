@@ -1,0 +1,39 @@
+---
+import Icon from "astro-iconify";
+import PrimaryButton from "../buttons/PrimaryButton.astro";
+
+---
+<div class="flex flex-col gap-10">
+    <div class="w-full grid grid-cols-12 lg:gap-5 border-t border-neutral-300/50">
+        <div class="mt-10 col-span-12 lg:col-span-7 flex flex-col gap-5 justify-start items-left">
+            <h2 class="text-3xl lg:text-5xl font-bold bg-linear-to-r from-amber-500 to-amber-300 bg-clip-text text-transparent">
+                Got an idea for a project?
+            </h2>
+            <h3 class="text-2xl text-neutral-300 font-bold px-2.5">
+                Let's discuss it togehter!
+            </h3>
+            <p class="text-base text-neutral-300 leading-relaxed px-2.5">
+                I'm always open to discuss new projects or work opportunities.<br>
+                Drop me a message and i'll get back to you as soon as I can!
+            </p>
+            <div class="px-2.5 max-w-60">
+                <PrimaryButton label="Contact Me" href="contact" />
+            </div>
+        </div>
+        <div class="lg:col-span-5 hidden lg:flex justify-center items-center mt-10">
+            <div class="grid place-items-center -rotate-15">
+                <Icon 
+                    name="proicons:lightbulb" 
+                    class="col-start-1 row-start-1 max-w-56 text-amber-500 blur-2xl opacity-25 z-0 scale-150"
+                />
+
+                <Icon 
+                    name="proicons:lightbulb" 
+                    class="col-start-1 row-start-1 w-xs text-amber-500 z-10
+                    mask-[linear-gradient(to_bottom,black_50%,transparent_100%)]"
+                />
+            </div>
+        </div>
+    </div>
+    <span class="py-10 text-sm lg:text-base text-neutral-500/70">© 2026 | Built with 🧡 using Astro & Tailwind by Giorgio Tassoni</span>
+</div>

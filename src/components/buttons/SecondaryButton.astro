@@ -1,0 +1,15 @@
+---
+interface Props {
+    label: string,
+    href: string
+}
+
+const { label, href } = Astro.props
+---
+
+<a href={href}
+target={href.startsWith('http') ? "_blank" : "_self"}
+rel={href.startsWith('http') ? "noopener noreferrer" : ""}
+class="btn-secondary">
+    <span> {label} </span>
+</a>

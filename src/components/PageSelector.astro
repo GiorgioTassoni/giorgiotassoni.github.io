@@ -1,0 +1,28 @@
+---
+import '../styles/global.css';
+
+interface Props {
+    href: string;
+    label: string;
+}
+
+const { href, label } = Astro.props
+
+const pathname = Astro.url.pathname;
+const isActive = pathname === href || (href !== '/' && pathname.startsWith(href))
+---
+
+<a href={href} class:list={["group no-underline min-w-30", { "pointer-events-none": isActive }]}>
+    <div
+        class:list={[
+            "flex items-center py-1.5 gap-3 rounded-xl text-neutral-300 justify-center transition-all duration-300",
+            {
+                "bg-neutral-300/5 shadow-md border border-amber-500 font-bold": isActive,
+                "font-normal hover:text-amber-500": !isActive
+            }
+        ]}
+        >
+
+        <span class="">{label}</span>
+        </div>
+</a>

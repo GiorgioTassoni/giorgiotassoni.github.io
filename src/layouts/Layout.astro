@@ -1,0 +1,40 @@
+---
+// src/layouts/Layout.astro
+import ProjectHeader from "@/components/sections/ProjectHeader.astro";
+import Notification from "@/components/Notification.astro";
+import { ClientRouter } from 'astro:transitions';
+import "@/styles/global.css";
+
+interface Props {
+    title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+        
+        <!-- Abilita le animazioni di transizione pagina in modo nativo! -->
+        <ClientRouter />
+    </head>
+
+    <body class="bg-neutral-950 flex flex-col items-center min-h-screen">
+        <header transition:name="main-header" transition:animate="none" class="top-0 z-50 w-full flex 
+        justify-center pt-8 pointer-events-none">
+            <div class="pointer-events-auto w-full">
+                <ProjectHeader />
+            </div>
+        </header>
+        
+        <main transition:animate="fade" class="w-full sm:max-w-5/6 md:max-w-4/5 lg:max-w-3/4 px-8 sm:px-4 lg:px-6 flex flex-col pb-40">
+            <slot />
+        </main>
+
+        <slot name="footer" />
+        <Notification />
+    </body>
+</html>

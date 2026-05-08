@@ -1,0 +1,61 @@
+---
+import { Icon } from 'astro-iconify';
+---
+
+<div 
+    id="toast-notification" 
+    class="fixed bottom-8 right-8 z-50 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl border 
+    bg-neutral-900 transition-all duration-500 translate-y-20 opacity-0 pointer-events-none">
+
+    <div id="toast-icon-success" class="hidden text-amber-500">
+        <Icon name="proicons:checkmark-circle" class="w-6 h-6" />
+    </div>
+
+    <div id="toast-icon-error" class="hidden text-red-500">
+        <Icon name="proicons:cancel-circle" class="w-6 h-6" />
+    </div>
+
+    <span id="toast-message" class="font-medium text-neutral-300"></span>
+</div>
+
+<script>
+    window.addEventListener('show-notification', ((e: CustomEvent) => {
+        const toast = document.getElementById('toast-notification');
+        const messageEl = document.getElementById('toast-message');
+        const iconSuccess = document.getElementById('toast-icon-success');
+        const iconError = document.getElementById('toast-icon-error');
+
+        if (!toast || !messageEl || !iconSuccess || !iconError) return;
+
+        const { message, type } = e.detail;
+
+        messageEl.innerText = message;
+
+        toast.className = "fixed bottom-8 right-8 z-50 flex items-center gap-3 px-6 py-4"
+        + " rounded-2xl shadow-2xl border transition-all duration-500";
+        iconSuccess.classList.add('hidden');
+        iconError.classList.add('hidden');
+
+        // Stiliamo in base al tipo (success o error)
+        if (type === 'success') {
+            toast.classList.add('bg-neutral-900', 'border-amber-500/30', 'text-amber-500');
+            iconSuccess.classList.remove('hidden');
+        } else {
+            toast.classList.add('bg-neutral-900', 'border-red-500/30', 'text-red-500');
+            iconError.classList.remove('hidden');
+        }
+
+        // Animiamo l'entrata rimuovendo l'offset e l'opacità zero
+        requestAnimationFrame(() => {
+            toast.classList.add('translate-y-0', 'opacity-100');
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+        });
+
+        // Nascondiamo automaticamente dopo 4 secondi
+        setTimeout(() => {
+            toast.classList.remove('translate-y-0', 'opacity-100');
+            toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        }, 4000);
+
+    }) as EventListener);
+</script>

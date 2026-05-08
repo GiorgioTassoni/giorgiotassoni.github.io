@@ -1,0 +1,38 @@
+---
+import BentoCard from "../BentoCard.astro";
+import BentoCardFull from "../BentoCardFull.astro";
+
+---
+<div class="flex flex-col gap-8 justify-start">
+    <div class="text-2xl md:text-3xl lg:text-4xl font-bold">
+        <h2 class="text-neutral-300">My </span> <span class="text-amber-500">Projects</h2>
+    </div>  
+    <div class="grid grid-cols-12 lg:grid-rows-2 gap-y-8 lg:gap-8">
+        <div class="col-span-12 lg:col-span-6 row-span-1">
+            <BentoCard
+            iconName="proicons:server"
+            title="SkyZaar - Bazaar scanner"
+            desc="Skyzaar is a tool designed to track and discover profitable market opportunities in the Hypixel Skyblock Bazaar"
+            buttonText="Live Demo"
+            href="https://skyzaar.cc"
+            githubHref="TODO"/>
+        </div>
+        <div class="col-span-12 row-start-3 lg:row-start-1 lg:col-span-6 lg:row-span-2 lg:col-start-7 h-full">
+            <BentoCardFull
+            iconName="proicons:apps"
+            title="Have a project in mind?"
+            desc="Reach me out! We can discuss it together and bring it to life!"
+            buttonText="Contact"
+            href="contact"/>
+        </div>
+        <div class="col-span-12 lg:col-span-6 row-span-1">
+            <BentoCard
+            iconName="proicons:game"
+            title="In or Out - 3h game jam"
+            desc="In or Out was our entry for the Trijam (a 3-hour game jam) on itch.io, created using Godot 4 with the FP Studio team."
+            buttonText="View on Itch"
+            href="https://fp-studio.itch.io/in-or-out"
+            githubHref="TODO"/>
+        </div>
+    </div>
+</div>

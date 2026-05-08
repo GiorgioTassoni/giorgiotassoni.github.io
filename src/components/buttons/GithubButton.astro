@@ -1,0 +1,20 @@
+---
+
+import Icon from 'astro-iconify'
+
+interface Props {
+    href: string;
+    label: string;
+}
+
+const { href, label } = Astro.props
+---
+
+<a href={href} 
+aria-label={label}
+class= {href.startsWith("TOD") ? "hidden" : 
+"min-w-12 min-h-12 bg-black/50 rounded-2xl group-hover:bg-black/30 flex justify-center items-center border-2 border-neutral-300/70"}>
+
+    <Icon name="proicons:github" class="h-auto w-10 text-neutral-300" aria-hidden="true"S/>
+</a>
+

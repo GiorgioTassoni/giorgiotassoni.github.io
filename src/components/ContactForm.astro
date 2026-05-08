@@ -1,0 +1,180 @@
+---
+// ContactForm.astro
+---
+
+<form id="contact-form" class="flex flex-col gap-1 w-full md:max-w-2xl lg:max-w-3xl" novalidate>
+    
+    <div class="flex flex-col gap-2 relative pb-5 animate-in delay-200">
+        <label for="user_name" class="text-neutral-300 font-medium pl-1">Name</label>
+        <input 
+            type="text" 
+            name="name" 
+            id="user_name" 
+            class="bg-neutral-900 border border-neutral-800 p-4 rounded-2xl 
+            text-neutral-300 outline-none focus:border-amber-500 transition-all"
+            placeholder="Your name"
+        />
+        <span id="name-error" class="text-red-500 text-sm pl-1 hidden absolute bottom-0 left-0">Name is required.</span>
+    </div>
+
+    <div class="flex flex-col gap-2 pb-5 relative animate-in delay-200">
+        <label for="user_email" class="text-neutral-300 font-medium pl-1">Email</label>
+        <input 
+            type="email" 
+            name="email" 
+            id="user_email" 
+            class="bg-neutral-900 border border-neutral-800 p-4 rounded-2xl 
+            text-neutral-300 outline-none focus:border-amber-500 transition-all"
+            placeholder="your@email.com"
+        />
+        <span id="email-error" class="text-red-500 text-sm pl-1 hidden absolute bottom-0 left-0">Please enter a valid email address.</span>
+    </div>
+
+    <div class="flex flex-col gap-2 pb-5 relative animate-in delay-300">
+        <label for="message" class="text-neutral-300 font-medium pl-1">Message</label>
+        <textarea 
+            name="message" 
+            id="message" 
+            rows="5" 
+            class="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 
+            text-neutral-300 outline-none focus:border-amber-500 transition-all resize-none"
+            placeholder="How can i help you?"></textarea>
+        <span id="message-error" class="text-red-500 text-sm pl-1 hidden absolute bottom-0 left-0">Message cannot be empty.</span>
+    </div>
+
+    <div class="flex flex-col gap-2 pb-5 relative animate-in delay-300">
+        <div class="g-recaptcha" data-sitekey={import.meta.env.PUBLIC_SITE_SIDE_CAPTCHA} data-theme="dark"></div>
+        <span id="captcha-error" class="text-red-500 text-sm pl-1 hidden absolute bottom-0 left-0">The captcha is needed.</span>
+    </div>
+
+    <button 
+        type="submit" 
+        id="submit-btn"
+        class="btn-primary py-4 mt-2 animate-in delay-300"
+    >
+        Send Message
+    </button>
+
+</form>
+
+<script>
+    
+    import emailjs from '@emailjs/browser';
+    document.addEventListener('astro:page-load', () => {
+
+        const captchaContainer = document.querySelector('.g-recaptcha');
+        
+        if (captchaContainer && (window as any).grecaptcha) {
+            if (captchaContainer.innerHTML.trim() === "") {
+                (window as any).grecaptcha.render(captchaContainer, {
+                    'sitekey': import.meta.env.PUBLIC_SITE_SIDE_CAPTCHA,
+                    'theme': 'dark'
+                });
+            }
+        }
+
+        const form = document.getElementById('contact-form') as HTMLFormElement;
+        if (!form) return;
+
+        const btn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+        const nameInput = document.getElementById('user_name') as HTMLInputElement;
+        const emailInput = document.getElementById('user_email') as HTMLInputElement;
+        const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+
+        const captchaError = document.getElementById('captcha-error');
+
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const messageError = document.getElementById('message-error');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        const toggleError = (element: HTMLElement | null, input: HTMLElement | null, show: boolean) => {
+            if (show) {
+                element?.classList.remove('hidden');
+                input?.classList.add('border-red-500'); 
+                input?.classList.remove('border-neutral-800', 'focus:border-amber-500');
+            } else {
+                element?.classList.add('hidden');
+                input?.classList.remove('border-red-500');
+                input?.classList.add('border-neutral-800', 'focus:border-amber-500');
+            }
+        };
+
+        form?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            let isValid = true;
+
+            if (nameInput.value.trim() === '') {
+                toggleError(nameError, nameInput, true);
+                isValid = false;
+            } else {
+                toggleError(nameError, nameInput, false);
+            }
+
+            if (!emailRegex.test(emailInput.value.trim())) {
+                toggleError(emailError, emailInput, true);
+                isValid = false;
+            } else {
+                toggleError(emailError, emailInput, false);
+            }
+
+            if (messageInput.value.trim() === '') {
+                toggleError(messageError, messageInput, true);
+                isValid = false;
+            } else {
+                toggleError(messageError, messageInput, false);
+            }
+
+            const captchaResponse = (window as any).grecaptcha.getResponse();
+            
+            if (captchaResponse === '') {
+                captchaError?.classList.remove('hidden');
+                isValid = false;
+            } else {
+                captchaError?.classList.add('hidden');
+            }
+
+            if (!isValid) return;
+            
+            btn.disabled = true;
+            btn.innerText = 'Sending...';
+
+            const SERVICE_ID = import.meta.env.PUBLIC_EMAILJS_SERVICE_ID;
+            const TEMPLATE_ID = import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID;
+            const PUBLIC_KEY = import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY;
+
+            emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form, PUBLIC_KEY)
+                .then(() => {
+                    window.dispatchEvent(new CustomEvent('show-notification', {
+                        detail: { message: 'Message sent successfully', type: 'success' }
+                    }));
+                    form.reset();
+                    (window as any).grecaptcha.reset();
+                })
+                .catch((error) => {
+                    console.error('Errore:', error);
+                    window.dispatchEvent(new CustomEvent('show-notification', {
+                        detail: { message: 'An error occurred. Try again later.', type: 'error' }
+                    }));
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerText = 'Send Message';
+                });
+        });
+    });
+</script>
+
+<style is:global>
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus {
+        transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+    }
+</style>

@@ -1,0 +1,38 @@
+---
+import {Icon} from 'astro-icon/components'
+import SecondaryButton from './buttons/SecondaryButton.astro';
+import GithubButton from './buttons/GithubButton.astro';
+
+interface Props {
+    title: string;
+    desc: string;
+    buttonText: string;
+    iconName: string;
+    href: string;
+    githubHref: string;
+}
+
+const { title, desc, buttonText, iconName, href, githubHref } = Astro.props
+---
+
+<div class="flex flex-col justify-start w-full h-full border-2 border-neutral-300/70
+ rounded-2xl p-4 lg:p-8 overflow-hidden duration-300 hover:border-amber-500/70">
+    
+    <div class="relative flex items-center justify-center w-16 h-16 shrink-0 mb-2">
+        <div class="absolute w-12 h-12 bg-amber-500 opacity-60 rounded-2xl blur-xl"/>
+        <Icon name={iconName} class="w-full h-full text-amber-500"/>
+    </div>
+    
+    <div class="flex flex-col gap-1">
+        <span class="text-xl md:text-2xl lg:text-3xl font-bold text-neutral-300 mb-2"> {title} </span>
+        <p class="text-sm md:text-base font-normal text-neutral-300">{desc}</p>
+    </div>
+    <div class="w-full flex flex-row gap-2 pt-5">
+        <SecondaryButton
+            href={href}
+            label={buttonText} 
+        />
+        <GithubButton href={githubHref} label='Link to GitHub'/>
+    </div>
+
+</div>

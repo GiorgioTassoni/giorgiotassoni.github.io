@@ -1,0 +1,13 @@
+---
+interface Props {
+    label: string,
+    href: string,
+    download?: string
+}
+
+const { label, href, download } = Astro.props
+---
+
+<a href={href} download={download} class="btn-primary">
+    <span> {label} </span>
+</a>

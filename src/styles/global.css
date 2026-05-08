@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+.project-card {
+  @apply opacity-0 translate-y-4.5 transition-all duration-800 ease-out;
+}
+
+.project-card.is-visible {
+  @apply opacity-100 translate-y-0;
+}
+
+@layer components {
+  .btn-primary {
+    @apply min-w-30 max-w-60 w-full min-h-12 px-4 py-2 rounded-2xl bg-amber-500 
+           hover:bg-amber-600 transition-all flex justify-center items-center 
+           lg:text-xl text-sm font-bold text-neutral-950 disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply flex min-w-30 max-w-60 w-full min-h-12 px-4 py-2 border border-amber-500 
+           justify-center items-center hover:bg-amber-500 rounded-2xl transition-all 
+           lg:text-xl text-sm font-bold text-neutral-300 hover:text-neutral-950;
+  }
+
+
+  .g-recaptcha {
+    max-width: 100%;
+  }
+
+  @media (max-width: 350px) {
+      .g-recaptcha {
+          transform: scale(0.9);
+          transform-origin: 0 0;
+      }
+  }
+
+
+}
+
+
+/* src/styles/global.css */
+
+/* Definiamo l'animazione di ingresso */
+@keyframes slide-up-entrance {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* La classe base che diamo a ogni sezione */
+.animate-in {
+  opacity: 0; /* Partono invisibili */
+  animation: slide-up-entrance 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Le classi per il ritardo (effetto cascata) */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
