@@ -32,6 +32,14 @@ jobs:
         with:
           path: ./dist
 
+      - name: Install, build, and upload
+        uses: withastro/action@v3
+        env:
+          PUBLIC_SITE_SIDE_CAPTCHA: ${{ secrets.PUBLIC_SITE_SIDE_CAPTCHA }}
+          PUBLIC_EMAILJS_SERVICE_ID: ${{ secrets.PUBLIC_EMAILJS_SERVICE_ID }}
+          PUBLIC_EMAILJS_TEMPLATE_ID: ${{ secrets.PUBLIC_EMAILJS_TEMPLATE_ID }}
+          PUBLIC_EMAILJS_PUBLIC_KEY: ${{ secrets.PUBLIC_EMAILJS_PUBLIC_KEY }}
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
